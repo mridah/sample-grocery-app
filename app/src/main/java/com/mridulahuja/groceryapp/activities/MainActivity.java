@@ -11,6 +11,7 @@ import com.mridulahuja.groceryapp.R;
 import com.mridulahuja.groceryapp.adapters.GroceryAdapter;
 import com.mridulahuja.groceryapp.models.Grocery;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,19 +35,26 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
         populateGroceries();
+
+
+        File f = new File(android.os.Environment.getExternalStorageDirectory(),File.separator+"GroceryApp/imgCache/");
+        if(!f.exists()) {
+            f.mkdirs();
+        }
+
     }
 
 
     private void populateGroceries() {
         groceryList.clear();
 
-        Grocery grocery = new Grocery("Watermelon", 80f, "1 pc", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZ9ScOVFfPuraBJKgY4BW9vZIPkVaRQVRrHPFTxQfbU_pkCMqu");
+        Grocery grocery = new Grocery("Watermelon", 80f, "1 pc", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6N0gBY5jRVaOa7m88OEzt-L8SyfxEFGp6ZuKTZJDwBwOqCXCU");
         groceryList.add(grocery);
 
         grocery = new Grocery("Apple", 60f, "1 Kg", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0hwr8auNvnc7yjv27PIll4300ukdk6lehKNjgt_J3vRhe0RD3");
         groceryList.add(grocery);
 
-        grocery = new Grocery("Banana", 30f, "1 Kg", "http://www.pngall.com/wp-content/uploads/2016/04/Banana-PNG-File-180x180.png");
+        grocery = new Grocery("Banana", 30f, "1 Kg", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjo6oNScWxGGHMpMoJvxo1RS7Eu_sXiz3Pgl4ZfBIoTwurMi-h");
         groceryList.add(grocery);
 
 

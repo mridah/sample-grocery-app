@@ -8,12 +8,18 @@ import android.widget.ImageView;
  */
 
 public class GroceryListImages {
+    private String fileName;
     private ImageView imgView;
     private String imgUrl;
 
-    public GroceryListImages(ImageView imgView, String imgUrl){
+    public GroceryListImages(String fileName, ImageView imgView, String imgUrl){
+        this.fileName = fileName;
         this.imgView = imgView;
         this.imgUrl = imgUrl;
+    }
+
+    public String getFileName() {
+        return this.fileName;
     }
 
     public String getImgUrl() {

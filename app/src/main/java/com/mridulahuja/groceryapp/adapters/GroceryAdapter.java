@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 import com.mridulahuja.groceryapp.R;
 import com.mridulahuja.groceryapp.models.Grocery;
 import com.mridulahuja.groceryapp.models.GroceryListImages;
+import com.mridulahuja.groceryapp.tools.BitmapTools;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.IOException;
@@ -75,10 +78,21 @@ public class GroceryAdapter extends RecyclerView.Adapter<GroceryAdapter.MyViewHo
         holder.txtItemName.setText(grocery.getItemName());
         String price = "\u20B9" + grocery.getPrice();
         holder.txtPrice.setText(price);
-        holder.txtUnit.setText(grocery.getUnit());
+        holder.txtUnit.setText(grocery.getUnit()+"          ");
 
-        GroceryListImages params = new GroceryListImages(holder.imgItem, grocery.getImgUrl());
-        new LoadImage().execute(params);
+
+        BitmapTools bitmapTools = new BitmapTools(holderContext);
+        Bitmap img = bitmapTools.loadImageFromStorage(Environment.getExternalStorageDirectory() + "/GroceryApp/imgCache/", grocery.getItemName());
+
+        if(img!=null) {
+            holder.imgItem.setImageBitmap(img);
+        }
+        else {
+            GroceryListImages params = new GroceryListImages(grocery.getItemName(),
+                    holder.imgItem,
+                    grocery.getImgUrl());
+            new LoadImage().execute(params);
+        }
 
     }
 
@@ -92,17 +106,19 @@ public class GroceryAdapter extends RecyclerView.Adapter<GroceryAdapter.MyViewHo
     private class LoadImage extends AsyncTask<GroceryListImages, Void, Drawable> {
 
         private ImageView imgView;
+        private String imgName;
 
         protected Drawable doInBackground(GroceryListImages... imgDetails) {
             String imgUrl = imgDetails[0].getImgUrl();
             imgView = imgDetails[0].getImgView();
+            imgName = imgDetails[0].getFileName();
 
             try {
                 InputStream is = (InputStream) new URL(imgUrl).getContent();
-                Drawable d = Drawable.createFromStream(is, "src name");
+                Drawable d = Drawable.createFromStream(is, "mrid");
                 return d;
             } catch (Exception e) {
-                System.out.println("Exception = " + e);
+                e.printStackTrace();
                 return null;
             }
         }
@@ -112,9 +128,12 @@ public class GroceryAdapter extends RecyclerView.Adapter<GroceryAdapter.MyViewHo
         }
 
         protected void onPostExecute(Drawable result) {
-         /* Image loaded...*/
 
             imgView.setImageDrawable(result);
+
+            Bitmap imgBitmap = ((BitmapDrawable)result).getBitmap();
+            BitmapTools bitmapTools = new BitmapTools(holderContext);
+            bitmapTools.saveToStorage(imgBitmap, imgName);
 
         }
     }
