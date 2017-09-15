@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,15 +81,16 @@ public class GroceryAdapter extends RecyclerView.Adapter<GroceryAdapter.MyViewHo
         holder.txtPrice.setText(price);
         holder.txtUnit.setText(grocery.getUnit()+"          ");
 
+        String imageName = grocery.getImgUrl().hashCode()+"";
 
         BitmapTools bitmapTools = new BitmapTools(holderContext);
-        Bitmap img = bitmapTools.loadImageFromStorage(Environment.getExternalStorageDirectory() + "/GroceryApp/imgCache/", grocery.getItemName());
+        Bitmap img = bitmapTools.loadImageFromStorage(Environment.getExternalStorageDirectory() + "/GroceryApp/imgCache/", imageName);
 
         if(img!=null) {
             holder.imgItem.setImageBitmap(img);
         }
         else {
-            GroceryListImages params = new GroceryListImages(grocery.getItemName(),
+            GroceryListImages params = new GroceryListImages(imageName,
                     holder.imgItem,
                     grocery.getImgUrl());
             new LoadImage().execute(params);
@@ -107,9 +109,10 @@ public class GroceryAdapter extends RecyclerView.Adapter<GroceryAdapter.MyViewHo
 
         private ImageView imgView;
         private String imgName;
+        private String imgUrl;
 
         protected Drawable doInBackground(GroceryListImages... imgDetails) {
-            String imgUrl = imgDetails[0].getImgUrl();
+            imgUrl = imgDetails[0].getImgUrl();
             imgView = imgDetails[0].getImgView();
             imgName = imgDetails[0].getFileName();
 
@@ -133,8 +136,8 @@ public class GroceryAdapter extends RecyclerView.Adapter<GroceryAdapter.MyViewHo
 
             Bitmap imgBitmap = ((BitmapDrawable)result).getBitmap();
             BitmapTools bitmapTools = new BitmapTools(holderContext);
-            bitmapTools.saveToStorage(imgBitmap, imgName);
-
+            bitmapTools.saveToStorage(imgBitmap, imgUrl.hashCode()+"");
+Log.i(">>>>", imgUrl.hashCode()+"");
         }
     }
 
