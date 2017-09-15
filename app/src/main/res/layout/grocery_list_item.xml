@@ -29,11 +29,8 @@
                 android:id="@+id/imgItem"
                 android:layout_width="50dip"
                 android:layout_height="50dip"
-                android:src="@drawable/ic_basket" />
+                android:src="@drawable/gorcery_list_placeholder" />
         </LinearLayout>
-
-        <!-- Title Of Song -->
-
 
 
         <TextView

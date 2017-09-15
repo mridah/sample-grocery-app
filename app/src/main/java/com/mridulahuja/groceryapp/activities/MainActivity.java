@@ -40,13 +40,13 @@ public class MainActivity extends AppCompatActivity {
     private void populateGroceries() {
         groceryList.clear();
 
-        Grocery grocery = new Grocery("Watermelon", 80f, "1 pc", "");
+        Grocery grocery = new Grocery("Watermelon", 80f, "1 pc", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZ9ScOVFfPuraBJKgY4BW9vZIPkVaRQVRrHPFTxQfbU_pkCMqu");
         groceryList.add(grocery);
 
-        grocery = new Grocery("Apple", 60f, "1 Kg", "");
+        grocery = new Grocery("Apple", 60f, "1 Kg", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0hwr8auNvnc7yjv27PIll4300ukdk6lehKNjgt_J3vRhe0RD3");
         groceryList.add(grocery);
 
-        grocery = new Grocery("Banana", 30f, "1 Kg", "");
+        grocery = new Grocery("Banana", 30f, "1 Kg", "http://www.pngall.com/wp-content/uploads/2016/04/Banana-PNG-File-180x180.png");
         groceryList.add(grocery);
 
 
