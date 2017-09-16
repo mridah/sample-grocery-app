@@ -15,13 +15,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mridulahuja.groceryapp.R;
 import com.mridulahuja.groceryapp.models.Grocery;
 import com.mridulahuja.groceryapp.models.GroceryListImages;
 import com.mridulahuja.groceryapp.tools.BitmapTools;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,11 +45,17 @@ public class GroceryAdapter extends RecyclerView.Adapter<GroceryAdapter.MyViewHo
     private Activity activity;
     ImageLoader imageLoader = ImageLoader.getInstance();
 
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView txtItemName;
         private TextView txtPrice;
         private TextView txtUnit;
         private ImageView imgItem;
+
+        private ImageView minusBtn;
+        private ImageView plusBtn;
+
+        private TextView currentQuantity;
 
         public MyViewHolder(View view) {
             super(view);
@@ -55,6 +65,10 @@ public class GroceryAdapter extends RecyclerView.Adapter<GroceryAdapter.MyViewHo
             txtPrice = (TextView) view.findViewById(R.id.txtPrice);
             txtUnit = (TextView) view.findViewById(R.id.txtUnit);
             imgItem = (ImageView) view.findViewById(R.id.imgItem);
+
+            minusBtn = (ImageView) view.findViewById(R.id.btnMinus);
+            plusBtn = (ImageView) view.findViewById(R.id.btnPlus);
+            currentQuantity = (TextView) view.findViewById(R.id.txtQuantity);
         }
     }
 
@@ -74,7 +88,7 @@ public class GroceryAdapter extends RecyclerView.Adapter<GroceryAdapter.MyViewHo
 
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, int position) {
         final Grocery grocery = groceryList.get(position);
         holder.txtItemName.setText(grocery.getItemName());
         String price = "\u20B9" + grocery.getPrice();
@@ -95,6 +109,34 @@ public class GroceryAdapter extends RecyclerView.Adapter<GroceryAdapter.MyViewHo
                     grocery.getImgUrl());
             new LoadImage().execute(params);
         }
+
+        holder.plusBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                LinearLayout layout = (LinearLayout) holder.plusBtn.getParent();
+                TextView txtQuantity = (TextView) layout.findViewById(R.id.txtQuantity);
+                int quantity = Integer.parseInt(txtQuantity.getText().toString());
+
+                quantity += 1;
+
+                holder.currentQuantity.setText(quantity+"");
+            }
+        });
+
+
+        holder.minusBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                LinearLayout layout = (LinearLayout) holder.minusBtn.getParent();
+                TextView txtQuantity = (TextView) layout.findViewById(R.id.txtQuantity);
+                int quantity = Integer.parseInt(txtQuantity.getText().toString());
+
+                if(quantity>0)
+                    quantity -= 1;
+
+                holder.currentQuantity.setText(quantity+"");
+            }
+        });
 
     }
 
@@ -137,7 +179,7 @@ public class GroceryAdapter extends RecyclerView.Adapter<GroceryAdapter.MyViewHo
             Bitmap imgBitmap = ((BitmapDrawable)result).getBitmap();
             BitmapTools bitmapTools = new BitmapTools(holderContext);
             bitmapTools.saveToStorage(imgBitmap, imgUrl.hashCode()+"");
-Log.i(">>>>", imgUrl.hashCode()+"");
+
         }
     }
 
