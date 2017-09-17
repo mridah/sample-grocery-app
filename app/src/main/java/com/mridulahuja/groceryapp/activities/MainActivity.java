@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.mridulahuja.groceryapp.R;
 import com.mridulahuja.groceryapp.adapters.GroceryAdapter;
 import com.mridulahuja.groceryapp.models.Grocery;
+import com.mridulahuja.groceryapp.tools.HeightResizeAnimation;
 
 import org.w3c.dom.Text;
 
@@ -48,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
 
     private int totalItemsSelected = 0;
     private float totalItemsSelectedPrice = 0;
+
+    private Boolean isPricebarVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,21 +192,58 @@ public class MainActivity extends AppCompatActivity {
             String price = "\u20B9"+Math.round(totalItemsSelectedPrice);
             lblItemCount.setText(quantity);
             lblTotalPrice.setText(price);
-            layoutPricebar.setVisibility(View.VISIBLE);
 
-            /*Animation animSFB = AnimationUtils.loadAnimation(MainActivity.this, R.anim.slide_in_from_bottom);
-            layoutPricebar.startAnimation(animSFB);*/
+            if(!isPricebarVisible) {
+                isPricebarVisible = true;
 
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) recyclerView.getLayoutParams();
-            params.height = relativeLayoutContainerHeight - 160;
-            recyclerView.setLayoutParams(params);
+                layoutPricebar.setVisibility(View.VISIBLE);
+
+                /*
+                * animating pricebar up from bottom
+                */
+                Animation animSIFB = AnimationUtils.loadAnimation(MainActivity.this, R.anim.slide_in_from_bottom);
+                layoutPricebar.startAnimation(animSIFB);
+
+                /*
+                * changing height of recyclerview after above animation is over
+                */
+                animSIFB.setAnimationListener(new Animation.AnimationListener() {
+                    public void onAnimationStart(Animation animation) {
+                    }
+                    public void onAnimationRepeat(Animation animation) {
+                    }
+                    public void onAnimationEnd(Animation animation) {
+                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) recyclerView.getLayoutParams();
+                        params.height = relativeLayoutContainerHeight - 160;
+                        recyclerView.setLayoutParams(params);
+                    }
+                });
+            }
+
         }
         else {
-            layoutPricebar.setVisibility(View.GONE);
+            if(isPricebarVisible) {
+                layoutPricebar.setVisibility(View.GONE);
+                isPricebarVisible = false;
 
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) recyclerView.getLayoutParams();
-            params.height = RelativeLayout.LayoutParams.MATCH_PARENT;
-            recyclerView.setLayoutParams(params);
+                /*
+                * sliding down pricebar
+                */
+                Animation animSOFB = AnimationUtils.loadAnimation(MainActivity.this, R.anim.slide_out_from_bottom);
+                layoutPricebar.startAnimation(animSOFB);
+
+                /*
+                * resizing the recyclerview along with the above animation ( simultaneously )
+                */
+                HeightResizeAnimation resizeAnimation = new HeightResizeAnimation(
+                        recyclerView,
+                        relativeLayoutContainerHeight,
+                        recyclerView.getMeasuredHeight()
+                );
+                resizeAnimation.setDuration(500);
+                recyclerView.startAnimation(resizeAnimation);
+            }
+
         }
     }
 }
