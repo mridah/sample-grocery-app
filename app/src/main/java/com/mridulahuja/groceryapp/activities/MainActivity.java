@@ -8,12 +8,15 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mridulahuja.groceryapp.R;
 import com.mridulahuja.groceryapp.adapters.GroceryAdapter;
 import com.mridulahuja.groceryapp.models.Grocery;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -25,12 +28,25 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private GroceryAdapter mAdapter;
 
+    private RelativeLayout layoutPricebar;
+    private TextView lblItemCount;
+    private TextView lblTotalPrice;
+
+    private int totalItemsSelected = 0;
+    private  int getTotalItemsSelectedPrice = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /*
+        * setting handlers
+        */
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        layoutPricebar = (RelativeLayout) findViewById(R.id.layoutPricebar);
+        lblItemCount = (TextView) findViewById(R.id.lblItemCount);
+        lblTotalPrice = (TextView) findViewById(R.id.lblTotalPrice);
 
         mAdapter = new GroceryAdapter(groceryList, new GroceryAdapter.GroceryAdapterListener() {
             @Override
@@ -38,10 +54,13 @@ public class MainActivity extends AppCompatActivity {
                 LinearLayout layout = (LinearLayout) v.getParent();
                 TextView txtQuantity = (TextView) layout.findViewById(R.id.txtQuantity);
                 int quantity = Integer.parseInt(txtQuantity.getText().toString());
-                if(quantity>0)
-                quantity -= 1;
+                if(quantity>0) {
+                    quantity -= 1;
+                    totalItemsSelected -= 1;
+                }
 
                 txtQuantity.setText(quantity+"");
+                showHidePricebar();
             }
 
             @Override
@@ -50,9 +69,10 @@ public class MainActivity extends AppCompatActivity {
                 TextView txtQuantity = (TextView) layout.findViewById(R.id.txtQuantity);
                 int quantity = Integer.parseInt(txtQuantity.getText().toString());
                 quantity += 1;
+                totalItemsSelected += 1;
 
                 txtQuantity.setText(quantity+"");
-
+                showHidePricebar();
             }
         });
 
@@ -88,9 +108,18 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
-
         mAdapter.notifyDataSetChanged();
+    }
+
+
+    private void showHidePricebar() {
+        if(totalItemsSelected>0) {
+            String quantity = totalItemsSelected + " items";
+            lblItemCount.setText(quantity);
+            layoutPricebar.setVisibility(View.VISIBLE);
+        }
+        else {
+            layoutPricebar.setVisibility(View.GONE);
+        }
     }
 }

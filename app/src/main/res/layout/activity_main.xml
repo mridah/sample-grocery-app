@@ -20,4 +20,75 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp" />
 
+    <RelativeLayout
+        android:id="@+id/layoutPricebar"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="#454560"
+        android:layout_marginLeft="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="0dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="0dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/lblItemCount"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:padding="5sp"
+            android:layout_marginTop="0dp"
+            android:textColor="#ffffff"
+            android:textSize="15sp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginRight="0dp"
+            android:text="5 Items" />
+
+        <TextView
+            android:id="@+id/lblItemCountSeparator"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/lblItemCount"
+            android:layout_toEndOf="@+id/lblItemCount"
+            android:gravity="center"
+            android:padding="5sp"
+            android:layout_marginTop="0dp"
+            android:textColor="#ffffff"
+            android:textSize="15sp"
+            android:layout_marginRight="0dp"
+            android:text=" | " />
+
+        <TextView
+            android:id="@+id/lblTotalPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/lblItemCountSeparator"
+            android:layout_toEndOf="@+id/lblItemCountSeparator"
+            android:gravity="center"
+            android:padding="5sp"
+            android:layout_marginTop="0dp"
+            android:textColor="#ffffff"
+            android:textSize="15sp"
+            android:layout_marginRight="0dp"
+            android:text="₹50" />
+
+
+    </RelativeLayout>
+
 </android.support.constraint.ConstraintLayout>

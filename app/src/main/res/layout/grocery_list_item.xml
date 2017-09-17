@@ -15,14 +15,16 @@
         android:orientation="horizontal"
         android:padding="10dp" >
 
-        <!-- ListRow Left sied Thumbnail image -->
+        <!-- ListRow Left side Thumbnail image -->
 
         <LinearLayout
             android:id="@+id/thumbnail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_marginRight="7dip"
+            android:layout_marginEnd="7dip"
             android:padding="2dip" >
 
             <ImageView
