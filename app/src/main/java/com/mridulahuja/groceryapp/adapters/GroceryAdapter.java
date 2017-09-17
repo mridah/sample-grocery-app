@@ -109,7 +109,7 @@ public class GroceryAdapter extends RecyclerView.Adapter<GroceryAdapter.MyViewHo
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         final Grocery grocery = groceryList.get(position);
         holder.txtItemName.setText(grocery.getItemName());
-        String price = "\u20B9" + grocery.getPrice();
+        String price = "\u20B9" + Math.round(grocery.getPrice());
         holder.txtPrice.setText(price);
         holder.txtUnit.setText(grocery.getUnit()+"          ");
 
