@@ -1,5 +1,6 @@
 package com.mridulahuja.groceryapp.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
@@ -7,7 +8,7 @@ import android.os.Bundle;
 
 import com.mridulahuja.groceryapp.R;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
