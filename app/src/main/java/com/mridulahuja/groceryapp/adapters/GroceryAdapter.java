@@ -8,7 +8,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mridulahuja.groceryapp.R;
 import com.mridulahuja.groceryapp.models.Grocery;
@@ -25,9 +23,6 @@ import com.mridulahuja.groceryapp.models.GroceryListImages;
 import com.mridulahuja.groceryapp.tools.BitmapTools;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import org.w3c.dom.Text;
-
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -43,7 +38,14 @@ public class GroceryAdapter extends RecyclerView.Adapter<GroceryAdapter.MyViewHo
     private Context holderContext;
     private View holderView;
     private Activity activity;
-    ImageLoader imageLoader = ImageLoader.getInstance();
+
+
+    public GroceryAdapterListener onClickListener;
+
+    public interface GroceryAdapterListener {
+        void plusButtonOnClickListener(View v, int position);
+        void minusButtonOnClickListener(View v, int position);
+    }
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -69,12 +71,28 @@ public class GroceryAdapter extends RecyclerView.Adapter<GroceryAdapter.MyViewHo
             minusBtn = (ImageView) view.findViewById(R.id.btnMinus);
             plusBtn = (ImageView) view.findViewById(R.id.btnPlus);
             currentQuantity = (TextView) view.findViewById(R.id.txtQuantity);
+
+
+            minusBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onClickListener.minusButtonOnClickListener(v, getAdapterPosition());
+                }
+            });
+
+            plusBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onClickListener.plusButtonOnClickListener(v, getAdapterPosition());
+                }
+            });
         }
     }
 
 
-    public GroceryAdapter(List<Grocery> groceryList) {
+    public GroceryAdapter(List<Grocery> groceryList, GroceryAdapterListener listener) {
         this.groceryList = groceryList;
+        this.onClickListener = listener;
     }
 
 
@@ -109,34 +127,6 @@ public class GroceryAdapter extends RecyclerView.Adapter<GroceryAdapter.MyViewHo
                     grocery.getImgUrl());
             new LoadImage().execute(params);
         }
-
-        holder.plusBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-
-                LinearLayout layout = (LinearLayout) holder.plusBtn.getParent();
-                TextView txtQuantity = (TextView) layout.findViewById(R.id.txtQuantity);
-                int quantity = Integer.parseInt(txtQuantity.getText().toString());
-
-                quantity += 1;
-
-                holder.currentQuantity.setText(quantity+"");
-            }
-        });
-
-
-        holder.minusBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-
-                LinearLayout layout = (LinearLayout) holder.minusBtn.getParent();
-                TextView txtQuantity = (TextView) layout.findViewById(R.id.txtQuantity);
-                int quantity = Integer.parseInt(txtQuantity.getText().toString());
-
-                if(quantity>0)
-                    quantity -= 1;
-
-                holder.currentQuantity.setText(quantity+"");
-            }
-        });
 
     }
 

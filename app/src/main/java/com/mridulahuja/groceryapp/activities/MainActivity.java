@@ -6,6 +6,10 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mridulahuja.groceryapp.R;
 import com.mridulahuja.groceryapp.adapters.GroceryAdapter;
@@ -28,7 +32,29 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
-        mAdapter = new GroceryAdapter(groceryList);
+        mAdapter = new GroceryAdapter(groceryList, new GroceryAdapter.GroceryAdapterListener() {
+            @Override
+            public void minusButtonOnClickListener(View v, int position) {
+                LinearLayout layout = (LinearLayout) v.getParent();
+                TextView txtQuantity = (TextView) layout.findViewById(R.id.txtQuantity);
+                int quantity = Integer.parseInt(txtQuantity.getText().toString());
+                if(quantity>0)
+                quantity -= 1;
+
+                txtQuantity.setText(quantity+"");
+            }
+
+            @Override
+            public void plusButtonOnClickListener(View v, int position) {
+                LinearLayout layout = (LinearLayout) v.getParent();
+                TextView txtQuantity = (TextView) layout.findViewById(R.id.txtQuantity);
+                int quantity = Integer.parseInt(txtQuantity.getText().toString());
+                quantity += 1;
+
+                txtQuantity.setText(quantity+"");
+
+            }
+        });
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -56,6 +82,12 @@ public class MainActivity extends AppCompatActivity {
 
         grocery = new Grocery("Banana", 30f, "1 Kg", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjo6oNScWxGGHMpMoJvxo1RS7Eu_sXiz3Pgl4ZfBIoTwurMi-h");
         groceryList.add(grocery);
+
+        grocery = new Grocery("Bread", 30f, "1 Kg", "http://www.freepngimg.com/thumb/bread/13-bread-png-image-thumb.png");
+        groceryList.add(grocery);
+
+
+
 
 
 
