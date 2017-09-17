@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView lblTotalPrice;
 
     private int totalItemsSelected = 0;
-    private  int getTotalItemsSelectedPrice = 0;
+    private float totalItemsSelectedPrice = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +53,13 @@ public class MainActivity extends AppCompatActivity {
             public void minusButtonOnClickListener(View v, int position) {
                 LinearLayout layout = (LinearLayout) v.getParent();
                 TextView txtQuantity = (TextView) layout.findViewById(R.id.txtQuantity);
+                TextView txtPrice = (TextView) layout.findViewById(R.id.txtPrice);
                 int quantity = Integer.parseInt(txtQuantity.getText().toString());
+                float unitPrice = Float.parseFloat(txtPrice.getText().toString().replace("\u20B9", ""));
                 if(quantity>0) {
                     quantity -= 1;
                     totalItemsSelected -= 1;
+                    totalItemsSelectedPrice -= unitPrice;
                 }
 
                 txtQuantity.setText(quantity+"");
@@ -67,9 +70,12 @@ public class MainActivity extends AppCompatActivity {
             public void plusButtonOnClickListener(View v, int position) {
                 LinearLayout layout = (LinearLayout) v.getParent();
                 TextView txtQuantity = (TextView) layout.findViewById(R.id.txtQuantity);
+                TextView txtPrice = (TextView) layout.findViewById(R.id.txtPrice);
                 int quantity = Integer.parseInt(txtQuantity.getText().toString());
+                float unitPrice = Float.parseFloat(txtPrice.getText().toString().replace("\u20B9", ""));
                 quantity += 1;
                 totalItemsSelected += 1;
+                totalItemsSelectedPrice += unitPrice;
 
                 txtQuantity.setText(quantity+"");
                 showHidePricebar();
@@ -115,7 +121,9 @@ public class MainActivity extends AppCompatActivity {
     private void showHidePricebar() {
         if(totalItemsSelected>0) {
             String quantity = totalItemsSelected + " items";
+            String price = "\u20B9"+Math.round(totalItemsSelectedPrice);
             lblItemCount.setText(quantity);
+            lblTotalPrice.setText(price);
             layoutPricebar.setVisibility(View.VISIBLE);
         }
         else {
