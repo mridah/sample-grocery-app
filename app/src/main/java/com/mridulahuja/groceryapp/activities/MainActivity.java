@@ -191,13 +191,6 @@ public class MainActivity extends AppCompatActivity {
                 isPricebarVisible = true;
 
                 layoutPricebar.setVisibility(View.VISIBLE);
-
-                /*
-                * animating pricebar up from bottom
-                */
-                Animation animSIFB = AnimationUtils.loadAnimation(MainActivity.this, R.anim.slide_in_from_bottom);
-                layoutPricebar.startAnimation(animSIFB);
-
             }
 
         }
@@ -205,13 +198,6 @@ public class MainActivity extends AppCompatActivity {
             if(isPricebarVisible) {
                 layoutPricebar.setVisibility(View.GONE);
                 isPricebarVisible = false;
-
-                /*
-                * sliding down pricebar
-                */
-                Animation animSOFB = AnimationUtils.loadAnimation(MainActivity.this, R.anim.slide_out_from_bottom);
-                layoutPricebar.startAnimation(animSOFB);
-
             }
 
         }
