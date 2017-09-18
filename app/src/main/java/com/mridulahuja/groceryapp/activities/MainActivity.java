@@ -31,7 +31,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RelativeLayout containerRelativeLayout;
+    private LinearLayout containerLinearLayout;
 
     private List<Grocery> groceryList = new ArrayList<>();
     private RecyclerView recyclerView;
@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
     private int screenHeight;
     private int screenWidth;
 
-    private int relativeLayoutContainerHeight = 0;
 
     private RelativeLayout layoutPricebar;
     private TextView lblItemCount;
@@ -51,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private float totalItemsSelectedPrice = 0;
 
     private Boolean isPricebarVisible = false;
+    private int pricebarHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,28 +65,24 @@ public class MainActivity extends AppCompatActivity {
         /*
         * setting handlers
         */
-        containerRelativeLayout = (RelativeLayout) findViewById(R.id.layoutMainContainer);
+        containerLinearLayout = (LinearLayout) findViewById(R.id.layoutMainContainer);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         layoutPricebar = (RelativeLayout) findViewById(R.id.layoutPricebar);
         lblItemCount = (TextView) findViewById(R.id.lblItemCount);
         lblTotalPrice = (TextView) findViewById(R.id.lblTotalPrice);
 
-        /*
-        * get container layout dimensions
-        */
 
-        ViewTreeObserver vto = containerRelativeLayout.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        ViewTreeObserver pricebarvto = layoutPricebar.getViewTreeObserver();
+        pricebarvto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                    containerRelativeLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    layoutPricebar.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 } else {
-                    containerRelativeLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    layoutPricebar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 }
                 //int width  = layout.getMeasuredWidth();
-                relativeLayoutContainerHeight = containerRelativeLayout.getMeasuredHeight();
-
+                pricebarHeight = layoutPricebar.getMeasuredHeight();
             }
         });
 
@@ -180,8 +176,6 @@ public class MainActivity extends AppCompatActivity {
         grocery = new Grocery("Bread", 30f, "1 Kg", "http://www.freepngimg.com/thumb/bread/13-bread-png-image-thumb.png");
         groceryList.add(grocery);
 
-
-
         mAdapter.notifyDataSetChanged();
     }
 
@@ -204,20 +198,6 @@ public class MainActivity extends AppCompatActivity {
                 Animation animSIFB = AnimationUtils.loadAnimation(MainActivity.this, R.anim.slide_in_from_bottom);
                 layoutPricebar.startAnimation(animSIFB);
 
-                /*
-                * changing height of recyclerview after above animation is over
-                */
-                animSIFB.setAnimationListener(new Animation.AnimationListener() {
-                    public void onAnimationStart(Animation animation) {
-                    }
-                    public void onAnimationRepeat(Animation animation) {
-                    }
-                    public void onAnimationEnd(Animation animation) {
-                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) recyclerView.getLayoutParams();
-                        params.height = relativeLayoutContainerHeight - 160;
-                        recyclerView.setLayoutParams(params);
-                    }
-                });
             }
 
         }
@@ -232,16 +212,6 @@ public class MainActivity extends AppCompatActivity {
                 Animation animSOFB = AnimationUtils.loadAnimation(MainActivity.this, R.anim.slide_out_from_bottom);
                 layoutPricebar.startAnimation(animSOFB);
 
-                /*
-                * resizing the recyclerview along with the above animation ( simultaneously )
-                */
-                HeightResizeAnimation resizeAnimation = new HeightResizeAnimation(
-                        recyclerView,
-                        relativeLayoutContainerHeight,
-                        recyclerView.getMeasuredHeight()
-                );
-                resizeAnimation.setDuration(500);
-                recyclerView.startAnimation(resizeAnimation);
             }
 
         }
